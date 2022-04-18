@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Person, Question, Answer
-from .serializers import PersonSerializer, QuestionSerializer, AnswerSerializer
+from .models import Person, Question
+from .serializers import PersonSerializer, QuestionSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import status
 from permissions import IsOwnerOrReadOnly
@@ -17,6 +17,8 @@ class Home(APIView):
 
 
 class QuestionListView(APIView):
+	throttle_scope = 'questions'
+
 	def get(self, request):
 		questions = Question.objects.all()
 		srz_data = QuestionSerializer(instance=questions, many=True).data
